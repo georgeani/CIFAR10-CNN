@@ -105,4 +105,95 @@ Additionally the increase in parameters may result in overfitting of the network
 inputs seems to indicate that the algorithm learns faster although the smaller input catches up
 on the larger input and has similar performance. Epochs start from 0 instead of 1.
 
-![Accuracy of using different inputs](/ImagesUsedForREADME/DifferentInputs.png "a title")
+![Accuracy of using different inputs](/ImagesUsedForREADME/DifferentInputs.png "Accuracy of using different inputs")
+
+To check the stride parameter in the input convolutional layer. The input layer was modified
+to have a stride of 2. This implementation resulted in a network with less parameters than the original one, the original one had 666,006 parameters while the new one had 341,862 parameters.
+The performance would be less optimal due to the parameters number, which is the case in this
+situation as the highest accuracy recorded was 0.7143 vs 0.7561 recorded in the model without
+a stride. This can be attributed to down-sampling, as some of the images’ pixels are skipped.
+Thus missing important information.
+
+![Accuracy of using stride vs without](/ImagesUsedForREADME/Stride.png "Accuracy of using stride vs without")
+
+Furthermore, interest has been given to the filters in the convolutional layers and how
+they can affect the model. The LeNet5 implementation seen up until this point has a input
+convolutional layer with filter 32, and second layer with filter 48. To check whether this had
+any impact on the performance a filter of 48 will be used followed by the next layer having a
+filter of 64 replacing the previous filters, the input used was 28x28x3. The total parameters of
+the new model are 906,470 compared to 850,326 of the previous implementation. The results of
+the training indicate a small increase of accuracy, new accuracy is 0.7572 compared to 0.7561.
+The new filters seem to indicate a better start in the training but at the end the original filters
+got similar results which does not justify the increase in time and computational power needed.
+
+![Accuracy of using old and new filters](/ImagesUsedForREADME/DifferentFilters.png "Accuracy of using old and new filters")
+
+As mentioned in the previous section dropout plays an important role in helping avoiding
+overfitting and learning on robust features. It would be interesting to see how it affects the
+learning and the overall performance of the network. There is no change in the parameters of
+the network but the maximum accuracy achieved is 0.7175 compared to 0.7561 which is a clear difference in performance. Additionally, the time needed to run the network without dropout is larger than running it with dropout making dropout a good choice. Yet, without dropout the
+network seems to have better initial performance.
+
+![Accuracy of using dropout vs with no dropout](/ImagesUsedForREADME/NoDropout.png "Accuracy of using dropout vs with no dropout")
+
+Working on the second architecture. Initially, evaluation of the best activation function for
+the input layer and for the output layer. The activation functions that will be examined are
+ReLu, Sigmoid, Tanh and Softmax.
+
+When it comes to the activation function of the convolutionary layer, the dense layer uses
+Softmax. The best performing is ReLu which has the steepest and it also has the least computational
+overhead from all the other functions. Second in performance is the Tanh which
+initially has less performance than ReLu but eventually catches on it and surpasses it yet, its
+seems to overfit quite easily.Softmax is also performing good as well as Sigmoid which was not
+performing that good in initial iterations.
+
+For the application of the activation functions in the dense layer the activation function is
+ReLu. The best performing activation function seems to be Sigmoid function followed by the
+Softmax. Sigmoid achieves the highest performance of 0.6495 followed by Softmax with highest
+performance of 0.6461. The other functions have a performance that hovers around 0.1 and as
+such they should not be used. Strictly using their performance as an evaluation would result in
+selecting the sigmoid, yet due to the sigmoid’s saturation problem, as values reach close either
+to 0 or 1, the gradient’s vanish which could hinder the performance of the network. This is not
+present in the SoftMax function and as such it is preferred.
+
+Finally, the performance of the baseline network will be evaluated with input 28x28x3 and
+with input 32x32x3. This will also include the simplified architecture to see the effects of more
+layers. It is worth noting that the simplified architecture has 65,290 parameters which are
+significantly less than the other architectures. To ensure the best performance the accuracy of
+the validation dataset will be used as well as the loss. Finally, callbacks have been implemented
+to detect possible overfitting or plateau of the learning parameter. Once this is detected the
+training stops or the learning parameter changes.
+
+Having run the experiment it is observed that the majority of the training did not reach end
+of the training period of 25 epochs. The more complex models seem to reach the 13 and 12 epoch
+mark before the callbacks stop the training. It is worth noting the the 32x32x3 input model is
+performing better than the 28x28x3 model although the performance is within the parameters
+that had seen before. More importantly though would be to focus on the val loss graph. This
+graph shows the change of the loss value that is used to indicate whether a model is overfitting
+or not. From the graph, the best performing is again the model with input 32x32x3 followed
+by 28x28x3. What is interesting is that the 32x32x3 model improves significantly faster than
+than 28x28x3 although both seem to follow a similar curve, although 32x32x3 seems to further
+ahead than 28x28x3. Yet, both terminate with similar values of the best epoch, for 28x28x3
+val loss 0.7870 with accuracy 0.7405 and for 32x32x3 val loss 0.7415 and accuracy 0.7559 thus
+there is not much of a real difference.
+
+The simplified architecture is observed under-performing significantly compared to the two
+previous architectures. Thus showing that it is not ideal to be implemented. It also shows the
+importance of the extra layers and how much more performance is improved by adding them.
+It is worth noting that the simpler architecture takes longer to reach accuracy and it seems it
+struggles to reach accuracy over 0.675. Also, it has a high val loss value meaning that it does
+not perform well.
+
+In conclusion, as it has been observed the best performing architecture in terms of performance
+is the 32x32x3 although if time is to be considered then 28x28x3 is the best. Increased
+filter size does not guarantee increased performance and the use of dropout layers increase the
+model’s performance significantly. Finally, in terms of performance the best activation functions
+is ReLu and then Softmax at the last layer.
+
+![Metrics of the use of the activation functions](/ImagesUsedForREADME/ActivationConv.png "Metrics of the use of the activation functions")
+
+![Metrics of the use of the activation functions](/ImagesUsedForREADME/ActivationDense.png "Metrics of the use of the activation functions")
+
+![Metrics of the performance of the evaluated networks](/ImagesUsedForREADME/FinalEvaluation.png "Metrics of the performance of the evaluated networks")
+
+![Metrics of the performance of the evaluated networks](/ImagesUsedForREADME/FinalEvaluationLoss.png "Metrics of the performance of the evaluated networks")
