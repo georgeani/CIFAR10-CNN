@@ -11,7 +11,7 @@ The observations can be seen later on in this file.
 
 The base architecture used was the LeNet5 implementation.
 
-The code can be found [here](\CIFAR10-CNN.ipynb).
+The code can be found [here](/Code/CIFAR10-CNN.ipynb).
 
 
 # Tools and modifications applied
